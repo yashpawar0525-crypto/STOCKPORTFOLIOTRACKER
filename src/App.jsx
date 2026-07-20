@@ -6,13 +6,18 @@ import SignupPage from './pages/SignupPage';
 import DashboardLayout from './pages/DashboardLayout';
 import DashboardOverviewPage from './pages/DashboardOverviewPage';
 import PortfolioPage from './pages/PortfolioPage';
-import WatchlistPage from './pages/WatchlistPage';
-import AnalyticsPage from './pages/AnalyticsPage';
+import StockDetailPage from './pages/StockDetailPage';
+import SettingsPage from './pages/SettingsPage';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
-
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="loading-screen" style={{ minHeight: '100vh' }}>
+        <span className="spinner" /> Loading…
+      </div>
+    );
+  }
   return user ? children : <Navigate to="/login" replace />;
 };
 
@@ -33,9 +38,11 @@ const App = () => {
         >
           <Route index element={<DashboardOverviewPage />} />
           <Route path="portfolio" element={<PortfolioPage />} />
-          <Route path="watchlist" element={<WatchlistPage />} />
-          <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="stock/:symbol" element={<StockDetailPage />} />
+          <Route path="settings" element={<SettingsPage />} />
         </Route>
+        {/* Catch-all */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
